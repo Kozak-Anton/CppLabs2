@@ -1,12 +1,13 @@
 #include "lib.h"
 
-void inputFile(string fileName) {
+void inputFile(const char* fileName) {
 	medication ampule;
 	ofstream file(fileName, ios::binary);
 	int num, addHours;
 
 
-	cout << "Number of ampules: "; cin >> num; cout << endl;
+	cout << "Enter number of ampules: "; cin >> num; cout << endl;
+	if (num <= 0) cout << "Error, no information given" << endl;
 	for (int i = 0; i < num; i++) {
 		cout << "Name: "; cin >> ampule.name;
 		cout << "Hours: "; cin >> ampule.hours;
@@ -26,17 +27,15 @@ void inputFile(string fileName) {
 	}
 
 	file.close();
-
 }
 
-void outputFile(string fileName) {
+void outputFile(const char* fileName) {
 	medication ampule;
 	ifstream file(fileName, ios::binary);
 
 	while (file.read((char*)&ampule, sizeof(medication))) {
-		if (ampule.daysMax - ampule.daysStored < 10) {
-			cout << "AMPULE ALMOST EXPIRED!"<<endl;
-		}
+		if (ampule.daysMax - ampule.daysStored < 0) cout << "AMPULE EXPIRED!"<<endl;
+		else if (ampule.daysMax - ampule.daysStored < 10) cout << "AMPULE ALMOST EXPIRED!" << endl;
 		cout << "Name: "<<ampule.name<<endl;
 		cout << "Effective after opening for: " << ampule.hours << "h:" << ampule.minutes <<"m" << endl;
 		cout << "Stored for: " << setprecision(1) << ampule.daysStored/365. << " years" << endl;
@@ -47,38 +46,24 @@ void outputFile(string fileName) {
 
 }
 
-void removeData(string fileName) {
-	void removeEntry(string, int);
+void removeData(const char* fileName) {
 
+	const char* tempName = "temp.txt";
 	medication ampule;
+	ofstream tempFile(tempName, ios::binary);
 	ifstream file(fileName, ios::binary);
-	int pos=0;
 
 	while (file.read((char*)&ampule, sizeof(medication))) {
-		if (ampule.daysStored > 365) {
-			removeEntry(fileName, pos);
+		if (ampule.daysStored <= 365) {
+			tempFile.write((char*)&ampule, sizeof(medication));
 		}
-		pos++;
 	}
+	tempFile.close();
+	file.close();
+
+	remove(fileName);
+	rename(tempName, fileName);
 
 }
-//TEST
-void print(medication ampule) {
-	cout << endl << "FILEWORK";
-	cout << "Name: " << ampule.name << endl;
-	cout << "Effective after opening for: " << ampule.hours << "h:" << ampule.minutes << "m" << endl;
-	cout << "Stored for: " << setprecision(1) << ampule.daysStored / 365. << " years" << endl;
-	cout << "Can be stored for: " << setprecision(1) << ampule.daysMax / 365. << " years" << endl;
-	cout << endl;
-}
-
-void removeEntry(string fileName, int pos) {
-	medication ampule;
-	ifstream iFile(fileName, ios::binary);
-	ofstream oFile(fileName, ios::binary);
 
 
-	iFile.close();
-	oFile.close();
-
-}

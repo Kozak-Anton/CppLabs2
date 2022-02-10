@@ -8,9 +8,11 @@ int main() {
 	const char* initFile = "initText.txt"; //початковий файл
 	const char* editFile = "editText.txt"; //відредагований файл
 
-	cout << "Input initial text here: " << endl;
+	cout << "Input initial text here(Enter empty line or Ctrl+Z for end of input): " << endl;
 	inputFile(initFile);
 	rewriteFile(initFile, editFile);
+	cout << "Initial text: " << endl;
+	printFile(initFile);
 	cout << "Edited text: " << endl;
 	printFile(editFile);
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -6,14 +6,14 @@
 
 using namespace std;
 
-struct medication {
-	char name[20];
-	int hours;
-	int minutes;
-	int daysStored;
-	int daysMax;
+struct medication { //характеристики ампули
+	char name[20];  //ім'я
+	int hours;      //годин дії
+	int minutes;    //хвилин дії
+	int daysStored; //днів зберігання 
+	int daysMax;    //срок придатності
 };
 
-void inputFile(string);
-void outputFile(string);
-void removeData(string);
+void inputFile(const char*);  //введення спику
+void outputFile(const char*); //виведення списку
+void removeData(const char*); //видалення зайвих ампул
